@@ -6,3 +6,12 @@ function getValidateString(str){
     return valido
 }
 
+function emailValidation(email){
+    if (correo.indexOf("@") === -1 || correo.indexOf(".") === -1) {
+        return false;
+    }
+    if (correo.indexOf("@") === 0 || correo.indexOf("@") === correo.length - 1 || correo.indexOf(".") === 0 || correo.indexOf(".") === correo.length - 1) {
+        return false;
+    }
+    return true;
+}

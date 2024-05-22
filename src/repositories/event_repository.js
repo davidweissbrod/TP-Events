@@ -140,7 +140,7 @@ export default class EventRepository {
         const client = new Client(config)
         try{
             await client.connect()
-            const sql = 'SELECT * FROM events WHERE last_name=$last_name'
+            const sql = 'SELECT * FROM events WHERE last_name=$1'
             const values = [last_name]
             const result = await client.query(sql, values)
             array = result.rows
@@ -159,7 +159,7 @@ export default class EventRepository {
         const client = new Client(config)
         try{
             await client.connect()
-            const sql = 'SELECT * FROM events WHERE username=$username'
+            const sql = 'SELECT * FROM events WHERE username=$1'
             const values = [username]
             const result = await client.query(sql, values)
             array = result.rows
@@ -178,7 +178,7 @@ export default class EventRepository {
         const client = new Client(config)
         try{
             await client.connect()
-            const sql = 'SELECT * FROM events WHERE attended=$attended'
+            const sql = 'SELECT * FROM events WHERE attended=$1'
             const values = [attended]
             const result = await client.query(sql, values)
             array = result.rows
@@ -197,7 +197,7 @@ export default class EventRepository {
         const client = new Client(config)
         try{
             await client.connect()
-            const sql = 'SELECT * FROM events WHERE rating=$rating'
+            const sql = 'SELECT * FROM events WHERE rating=$1'
             const values = [rating]
             const result = await client.query(sql, values)
             array = result.rows
