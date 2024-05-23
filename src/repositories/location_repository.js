@@ -21,4 +21,42 @@ export default class LocationRepository {
         }
         return array
     }
+
+    getLocationById = async () => {
+        let array = null
+        const client = new Client(config)
+        try{
+            await client.connect()
+            const sql = 'SELECT * FROM locations WHERE id=$1'
+            const values = [id]
+            const result = await client.query(sql, values)
+            array = result.rows
+        }
+        catch (error){
+            console.log(error)
+        }
+        finally {
+            await client.end()
+        }
+        return array
+    }
+
+    getEventLocationById = async () => {
+        let array = null
+        const client = new Client(config)
+        try{
+            await client.connect()
+            const sql = 'SELECT event_location FROM locations WHERE id=$1'
+            const values = [id]
+            const result = await client.query(sql, values)
+            array = result.rows
+        }
+        catch (error){
+            console.log(error)
+        }
+        finally {
+            await client.end()
+        }
+        return array
+    }
 }

@@ -31,7 +31,7 @@ router.get('/api/location/{id}/event-location', async (req, res) => { //FALTA HA
     if(array != null){
         ret = res.status(200).json(array)
     }else{
-        ret = res.status(500).send('Error')
+        ret = res.status(404).send('No se encontro')
     }
     return ret
 });
