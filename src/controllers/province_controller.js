@@ -27,7 +27,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('', async(req,res) => {
     let ret;
-    ret = await svc.insertProvince(new Province(req.body.name, req.body.full_name, req.body.latitudeM, req.body.longitude, req.body.display_order))
+    ret = await svc.insertProvince(new Province(req.body.name, req.body.full_name, req.body.latitude, req.body.longitude, req.body.display_order))
     if(ret){
         ret = res.status(201).send("Provincia creada")
     }

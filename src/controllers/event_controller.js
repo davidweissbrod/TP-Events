@@ -113,3 +113,5 @@ router.get('/api/event/{id}/enrollment?rating={entero}', async (req, res) => {
         ret = res.status(404).send('Error')
     }
 })
+
+export default router;

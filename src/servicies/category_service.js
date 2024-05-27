@@ -1,4 +1,4 @@
-import EventCategoryRepository from '../repositories/province_repository.js'
+import EventCategoryRepository from '../repositories/category_repository.js'
 
 export default class EventCategoryService {
     getAllAsync = async () => {

@@ -61,3 +61,5 @@ router.delete('/api/event-category/{id}', async (req, res) => {
         ret = res.status(404).send('No se encontro el id')
     }
 })
+
+export default router;

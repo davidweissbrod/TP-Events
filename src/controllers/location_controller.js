@@ -35,3 +35,5 @@ router.get('/api/location/{id}/event-location', async (req, res) => { //FALTA HA
     }
     return ret
 });
+
+export default router;

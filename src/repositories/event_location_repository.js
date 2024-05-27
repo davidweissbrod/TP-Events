@@ -2,7 +2,7 @@ import config from "src/configs/dbconfig.js";
 import pkg from 'pg';
 const {Client} = pkg;
 
-export default class EventCategoryRepository {
+export default class EventLocationRepository {
     getAllAsync = async () => {
         let array = null
         const client = new Client(config)
@@ -21,12 +21,12 @@ export default class EventCategoryRepository {
         return array
     }
 
-    getCategoryById = async (id) => {
+    getEventLocationById = async (id) => {
         let array = null
         const client = new Client(config)
         try{
             await client.connect()
-            const sql = 'SELECT * FROM event_category WHERE id=$1'
+            const sql = 'SELECT * FROM event_location WHERE id=$1'
             const values = [id]
             const result = await client.query(sql, values)
             array = result.rows
@@ -40,12 +40,12 @@ export default class EventCategoryRepository {
         return array
     }
 
-    insertCategory = async (cat) => {
+    insertEventLocation = async (ev_loc) => {
         const client = new Client(config)
         try{
             await client.connect();
-            const sql = 'INSERT INTO public.provinces (name, display_order) VALUES ($1, $2)'
-            const values = [cat.name, cat.display_order]
+            const sql = 'INSERT INTO public.event_location (id_location, name, full_adress, max_capacity, latitude, longitude, id_creator_user) VALUES ($1, $2, $3, $4, $5, $6, $7)'
+            const values = [ev_loc.id_location, ev_loc.name, ev_loc.full_adress, ev_loc.max_capacity, ev_loc.latitude, ev_loc.longitude, ev_loc.id_creator_user]
             const result = await client.query(sql, values)
             return true
         }
@@ -58,12 +58,12 @@ export default class EventCategoryRepository {
         }
     }
 
-    updateEventCategory = async (cat) => {
+    updateEventLocation = async (ev_loc) => {
         const client = new Client(config)
         try{
             await client.connect()
-            const sql = 'UPDATE public.event_category SET "name" = $1, display_order = $2'
-            const values = [cat.name, cat.display_order, cat.id]
+            const sql = 'UPDATE public.event_location SET id_location = $1, name = $2, full_adress = $3, max_capacity = $4, latitude = $5, longitude = $6, id_creator_user = $7'
+            const values = [ev_loc.id_location, ev_loc.name, ev_loc.full_adress, ev_loc.max_capacity, ev_loc.latitude, ev_loc.longitude, ev_loc.id_creator_user]
             const result = await client.query(sql, values)
             if(result.rowCount == 0){
                 return false
@@ -79,11 +79,11 @@ export default class EventCategoryRepository {
         }
     }
 
-    deleteEventCategory = async (id) => {
+    deleteEventLocation = async (id) => {
         const client = new Client(config)
         try{
             await client.connect();
-            const sql = 'DELETE FROM event_category WHERE id = $1'
+            const sql = 'DELETE FROM event_location WHERE id = $1'
             const values = [id]
             const result = await client.query(sql, values)
             if(result.rowCount == 0){
