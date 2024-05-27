@@ -1,4 +1,4 @@
-import LocationRepository from '../repositories/location-repository.js'
+import LocationRepository from '../repositories/location_repository.js'
 
 export default class LocationService {
     getAllAsync = async () => {

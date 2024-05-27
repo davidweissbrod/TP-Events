@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import EventService from 'src/services/category_service.js'
+import EventCategoryService from 'src/services/category_service.js'
 const router = Router();
 const svc = new ProvinceService();
 
@@ -35,5 +35,29 @@ router.post('/api/event-category/', async (req, res) => {
     }
     else{
         ret = res.status(400).send("Error")
+    }
+})
+
+router.put('/api/event-category/', async (req, res) => {
+    let ret;
+    ret = await svc.updateEventCategory(new EventCategory(req.body.name, req.body.display_order))
+    if(ret){
+        ret = res.status(200).send('Creado')
+    } 
+    else if(getValidateString(req.body.name)){
+        ret = res.status(400).send('El nombre es invalido')
+    } 
+    else{
+        ret = res.status(404).send('No se encontro el id')
+    }
+})
+
+router.delete('/api/event-category/{id}', async (req, res) => {
+    let ret;
+    ret = await svc.deleteEventCategory(req.params.id)
+    if(ret){
+        ret = res.status(200).send('Borrado')
+    } else{
+        ret = res.status(404).send('No se encontro el id')
     }
 })

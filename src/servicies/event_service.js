@@ -1,4 +1,4 @@
-import EventRepository from '../repositories/province-repository.js'
+import EventRepository from '../repositories/category_repository.js'
 
 export default class EventService {
     getAllAsync = async () => {

@@ -1,4 +1,4 @@
-import UserRepository from '../repositories/user-repository.js'
+import UserRepository from '../repositories/user_repository.js'
 
 export default class UserService{
     insertUser = async () => {
