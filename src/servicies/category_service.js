@@ -6,23 +6,23 @@ export default class EventCategoryService {
         return await repo.getAllAsync();
     }
 
-    getCategoryById = async () => {
+    getCategoryById = async (id) => {
         const repo = new EventCategoryRepository();
-        return await repo.getCategoryById();
+        return await repo.getCategoryById(id);
     }
 
-    insertCategory = async () => {
+    insertCategory = async (cat) => {
         const repo = new EventCategoryRepository();
-        return await repo.insertCategory();
+        return await repo.insertCategory(cat);
     }
 
-    updateEventCategory = async () => {
+    updateEventCategory = async (eventCategory) => {
         const repo = new EventCategoryRepository();
-        return await repo.updateEventCategory();
+        return await repo.updateEventCategory(eventCategory);
     }
 
-    deleteEventCategory = async () => {
+    deleteEventCategory = async (id) => {
         const repo = new EventCategoryRepository();
-        return await repo.deleteEventCategory();
+        return await repo.deleteEventCategory(id);
     }
 }

@@ -1,12 +1,12 @@
 import UserRepository from '../repositories/user_repository.js'
 
 export default class UserService{
-    insertUser = async () => {
+    insertUser = async (user) => {
         const repo = UserRepository();
         return await repo.insertUser(user)
     }
-    getUserById = async () => {
+    getUserById = async (id) => {
         const repo = UserRepository();
-        return await repo.getUserByUsername()
+        return await repo.getUserByUsername(id)
     }
 }

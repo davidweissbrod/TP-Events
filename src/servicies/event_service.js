@@ -5,43 +5,43 @@ export default class EventService {
         const repo = new EventRepository();
         return await repo.getAllAsync();
     }
-    getEventByName = async () => {
+    getEventByName = async (eventName) => {
         const repo = new EventRepository();
         return await repo.getEventByName(eventName);
     }
-    getEventByCategory = async () => {
+    getEventByCategory = async (category) => {
         const repo = EventRepository();
         return await repo.getEventByCategory(category);
     }
-    getEventByDate = async () => {
+    getEventByDate = async (date) => {
         const repo = EventRepository();
         return await repo.getEventByDate(date)
     }
-    getEventByTag = async () => {
+    getEventByTag = async (tag) => {
         const repo = EventRepository();
         return await repo.getEventByTag(tag)
     }
-    getEventById = async () => {
+    getEventById = async (id) => {
         const repo = EventRepository();
         return await repo.getEventById(id)
     }
-    getEventByFirstName = async () => {
+    getEventByFirstName = async (first_name) => {
         const repo = EventRepository();
         return await repo.getEventByFirstName(first_name)
     }
-    getEventByLastName = async () => {
+    getEventByLastName = async (last_name) => {
         const repo = EventRepository();
         return await repo.getEventByLastName(last_name)
     }
-    getEventByUsername = async () => {
+    getEventByUsername = async (username) => {
         const repo = EventRepository();
         return await repo.getEventByUsername(username)
     }
-    getEventByAttendance = async () => {
+    getEventByAttendance = async (attended) => {
         const repo = EventRepository();
         return await repo.getEventByAttendance(attended)
     }
-    getEventByRating = async () => {
+    getEventByRating = async (rating) => {
         const repo = EventRepository();
         return await repo.getEventByRating(rating)
     }
