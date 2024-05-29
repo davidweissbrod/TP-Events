@@ -15,3 +15,5 @@ const options = {
 
 const token = jwt.sign(payload, key, options)
 console.log(token)
+
+export default token;
