@@ -22,7 +22,7 @@ export default class LocationRepository {
         return array
     }
 
-    getLocationById = async () => {
+    getLocationById = async (id) => {
         let array = null
         const client = new Client(config)
         try{
@@ -41,7 +41,7 @@ export default class LocationRepository {
         return array
     }
 
-    getEventLocationById = async () => {
+    getEventLocationById = async (id) => {
         let array = null
         const client = new Client(config)
         try{

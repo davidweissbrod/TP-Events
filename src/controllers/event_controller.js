@@ -114,4 +114,9 @@ router.get('/api/event/{id}/enrollment?rating={entero}', async (req, res) => {
     }
 })
 
+router.get('/api/event/', async (req, res) => {
+    let ret;
+    ret = await svc.insertEvent(new Event(req.body.name, req.body.description, req.body.id_event_category, req.body.id_event_location, req.body.start_date, req.body.duration_in_minutes, req.body.price, req.enabled.for.enrollment, req.body.max_assitance, req.body.id_creator_user))
+})
+
 export default router;
