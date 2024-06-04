@@ -1,4 +1,4 @@
-class LoginResponeDTO{
+class LoginResponseDTO{
     success = false;
     message = "";
     token = "";
@@ -10,4 +10,4 @@ class LoginResponeDTO{
     }
 }
 
-export default LoginResponeDTO;
+export default LoginResponseDTO;

@@ -1,7 +1,7 @@
 import {Router} from 'express';
 import LocationService from 'src/services/user-service.js'
 const router = Router();
-const svc = new ProvinceService();
+const svc = new LocationService();
 
 router.get('/api/location', async (req, res) => {
     let res;

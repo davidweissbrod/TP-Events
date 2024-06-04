@@ -1,7 +1,7 @@
 import {Router} from 'express';
 import EventLocationService from 'src/services/event_location_service.js'
 const router = Router();
-const svc = new EventService();
+const svc = new EventLocationService();
 
 app.get('/api/event-location', async (req, res) => {
     let ret;

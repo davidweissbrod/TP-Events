@@ -1,19 +1,24 @@
 import jwt from 'jsonwebtoken'
-import user from './src/entities/users.js'
-
-const payload = {
-    username: user.username,
-    password: user.password
-}
-
-const key = 'Secreto123#'
 
 const options = {
     expiresIn: '7d',
-    issuer: 'Events'
+    issuer: 'TLT'
 }
+const key = "#Secreto"
 
-const token = jwt.sign(payload, key, options)
-console.log(token)
-
-export default token;
+export default class Token{
+    async generateToken(payload){
+        const token = jwt.sign(payload, secretKey, options);
+        return token;
+    }
+    
+    async decryptToken(token){
+        try{
+            const payload = await jwt.verify(token, secretKey)
+            return payload;
+        }
+        catch(e){
+            console.log(e);
+        }
+    }
+}

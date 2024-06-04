@@ -7,6 +7,10 @@ export default class UserService{
     }
     getUserById = async (id) => {
         const repo = UserRepository();
-        return await repo.getUserByUsername(id)
+        return await repo.getUserById(id)
+    }
+    getUserByUsernamePassword = async (username, password) => {
+        const repo = UserRepository();
+        return await repo.getUserByUsernamePassword(username, password)
     }
 }

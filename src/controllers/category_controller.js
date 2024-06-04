@@ -1,7 +1,7 @@
 import {Router} from 'express';
 import EventCategoryService from 'src/services/category_service.js'
 const router = Router();
-const svc = new ProvinceService();
+const svc = new EventCategoryService();
 
 router.get('/api/event-category', async (req, res) => {
     let res;

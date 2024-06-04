@@ -1,10 +1,10 @@
 import {Router} from 'express';
 import UserService from 'src/services/user-service.js'
 const router = Router();
-const svc = new ProvinceService();
+const svc = new UserService();
 
 
-router.post('/api/user/register', async (req, res) => {
+router.get('/api/user/register', async (req, res) => {
     let ret;
     const array = await svc.getUserById(req.body.user.id)
     if(array != null){
@@ -21,6 +21,16 @@ router.post('/api/user/login', async (req, res) => {
         ret = res.status(201).send('Creado')
     } else{
         ret = res.status(400).send('Error')
+    }
+})
+
+router.get('api/user', async (req, res) => {
+    let ret;
+    const array = await svc.getUserByUsernamePassword(req.body.username, req.body.password)
+    if(array != null){
+        ret = res.status(200).json(array)
+    } else{
+        ret = res.status(401).send('User inexistente')
     }
 })
 
