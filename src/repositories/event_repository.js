@@ -210,4 +210,64 @@ export default class EventRepository {
         }
         return array
     }
+
+    insertEvent = async (ev) => {
+        const client = new Client(config)
+        try{
+            await client.connect();
+            const sql = 'INSERT INTO public.events () VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)'
+            const values = [ev.name, ev.description, ev.id_event_category, ev.id_event_location, ev.start_date, ev.duration_in_minutes, ev.price, ev.enabled_for_enrollments, ev.max_assistance, ev.id_creator_user]
+            const result = await client.query(sql, values)
+            return true
+        }
+        catch (error){
+            console.log(error)
+            return false
+        }
+        finally {
+            await client.end()
+        }
+    }
+
+    updateEvent = async (ev) => {
+        const client = new Client(config)
+        try{
+            await client.connect()
+            const sql = 'UPDATE public.events SET name = $1, description = $2, id_event_category = $3, id_event_location =  $4, start_date = $5, duration_in_minutes = $6, price = $7, enabled_for_enrollment = $8, max_assitance = $9, id_creator_user = $10'
+            const values = [ev.name, ev.description, ev.id_event_category, ev.id_event_location, ev.start_date, ev.duration_in_minutes, ev.price, ev.enabled_for_enrollment, ev.max_assistance, ev.id_creator_user]
+            const result = await client.query(sql, values)
+            if(result.rowCount == 0){
+                return false
+            }
+            return true
+        }
+        catch (error){
+            console.log(error)
+            return false
+        }
+        finally {
+            await client.end()
+        }
+    }
+
+    deleteEventById = async (id) => {
+        const client = new Client(config)
+        try{
+            await client.connect();
+            const sql = 'DELETE FROM events WHERE id = $1'
+            const values = [id]
+            const result = await client.query(sql, values)
+            if(result.rowCount == 0){
+                return false
+            }
+            return true
+        }   
+        catch(error){
+            console.log(error)
+            return null
+        }
+        finally {
+            await client.end()
+        }
+    }
 }

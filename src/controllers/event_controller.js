@@ -164,5 +164,8 @@ router.delete('/api/event/{id}', async (req, res) => {
     }
 })
 
+router.post('/api/event/{id}/enrollment/', async (req, res) => {
+    
+})
 
 export default router;

@@ -24,7 +24,7 @@ router.post('/api/user/login', async (req, res) => {
     }
 })
 
-router.get('api/user', async (req, res) => {
+router.get('/api/user', async (req, res) => {
     let ret;
     const array = await svc.getUserByUsernamePassword(req.body.username, req.body.password)
     if(array != null){

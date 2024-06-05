@@ -45,4 +45,16 @@ export default class EventService {
         const repo = EventRepository();
         return await repo.getEventByRating(rating)
     }
+    insertEvent = async (ev) => {
+        const repo = EventRepository();
+        return await repo.insertEvent(ev)
+    }
+    updateEvent = async (ev) => {
+        const repo = EventRepository();
+        return await repo.updateEvent(ev)
+    }
+    deleteEventById = async (id) => {
+        const repo = EventRepository();
+        return await repo.deleteEventById(id)
+    }
 }
