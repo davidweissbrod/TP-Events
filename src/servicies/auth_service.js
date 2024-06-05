@@ -1,4 +1,4 @@
-import TokenHelper from './auth/token'
+import TokenHelper from './auth/token.js'
 import LoginResponseDTO from '../entities/LoginResponse.js'
 import UserService from './user_service.js'
 

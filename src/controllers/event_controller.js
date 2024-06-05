@@ -1,5 +1,8 @@
 import {Router} from 'express';
 import EventService from 'src/services/event_service.js'
+import ValidacionesHelper from './helpers/validaciones-helper'
+import AuthMiddleware from './middlewares/auth_middleware.js'
+import AuthService from './services/auth_service.js'
 const router = Router();
 const svc = new EventService();
 
@@ -114,9 +117,52 @@ router.get('/api/event/{id}/enrollment?rating={entero}', async (req, res) => {
     }
 })
 
-router.get('/api/event/', async (req, res) => {
+router.post('/api/event/', async (req, res) => {
     let ret;
+    const assitance = req.body.max_assitance
+    const capacity = req.body.max_capacity
+    const price = req.body.price
+    const duration = req.body.duration_in_minutes
     ret = await svc.insertEvent(new Event(req.body.name, req.body.description, req.body.id_event_category, req.body.id_event_location, req.body.start_date, req.body.duration_in_minutes, req.body.price, req.enabled.for.enrollment, req.body.max_assitance, req.body.id_creator_user))
+    if(ret && ValidacionesHelper.getValidatedString(req.body.name) && ValidacionesHelper.getValidatedString(req.body.description) && assitance <= capacity && price > 0 && duration > 0){
+        ret = res.status(201).send('Created')
+    } else if(AuthService){
+        ret = res.status(401).send('Unauthorized')
+    } else{
+        ret = res.status(400).send('Bad Request')
+    }
 })
+
+router.put('/api/event/', async (req, res) => {
+    let ret;
+    const assitance = req.body.max_assitance
+    const capacity = req.body.max_capacity
+    const price = req.body.price
+    const duration = req.body.duration_in_minutes
+    ret = await svc.updateEvent(new Event(req.body.name, req.body.description, req.body.id_event_category, req.body.id_event_location, req.body.start_date, req.body.duration_in_minutes, req.body.price, req.enabled_for_enrollment, req.body.max_assitance, req.body.id_creator_user))
+    if(ret && ValidacionesHelper.getValidatedString(req.body.name) && ValidacionesHelper.getValidatedString(req.body.description) && assitance <= capacity && price > 0 && duration > 0){
+        ret = res.status(200).send('Updated')
+    } else if(AuthService){
+        ret = res.status(401).send('Unauthorized')
+    } else{
+        ret = res.status(404).send('No se encontro el id')
+    }
+})
+
+router.delete('/api/event/{id}', async (req, res) => {
+    let ret;
+    const enabled = req.body.enabled_for_enrollment
+    ret = await svc.deleteEventById(req.params.id)
+    if(ret){
+        ret = res.status(200).send('Borrado')
+    } else if(!enabled){
+        ret = res.status(400).send('Bad Request')
+    } else if(AuthService){
+        ret = res.status(401).send('Unauthorized')
+    } else {
+        ret = res.status(404).send('No se encontro el id')    
+    }
+})
+
 
 export default router;
