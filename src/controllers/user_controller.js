@@ -1,5 +1,6 @@
 import {Router} from 'express';
-import UserService from 'src/services/user-service.js'
+import UserService from 'src/services/user_service.js'
+import AuthService from 'src/services/auth_service'
 const router = Router();
 const svc = new UserService();
 
@@ -10,7 +11,7 @@ router.get('/api/user/register', async (req, res) => {
     if(array != null){
         ret = res.status(200).json(array + ' OK')
     } else{
-        ret = res.status(401).send('User inexistente')
+        ret = res.status(401).send('Usuario inexistente')
     }
 })
 
@@ -30,7 +31,7 @@ router.get('/api/user', async (req, res) => {
     if(array != null){
         ret = res.status(200).json(array)
     } else{
-        ret = res.status(401).send('User inexistente')
+        ret = res.status(401).send('Usuario inexistente')
     }
 })
 

@@ -1,5 +1,6 @@
 import {Router} from 'express';
-import LocationService from 'src/services/user-service.js'
+import LocationService from 'src/services/user_service'
+import AuthMiddleware from 'src/middlewares/auth_middleware'
 const router = Router();
 const svc = new LocationService();
 
@@ -25,15 +26,19 @@ router.get('/api/location/{id}', async (req, res) => {
     return ret
 });
 
-router.get('/api/location/{id}/event-location', async (req, res) => { //FALTA HACER LA AUTENTICACION DE ESTE 
-    let ret;
-    const array = await svc.getEventLocationById(req.params.id);
-    if(array != null){
-        ret = res.status(200).json(array)
-    }else{
-        ret = res.status(404).send('No se encontro')
+router.get('/api/location/{id}/event-location', AuthMiddleware, async (req, res) => { 
+    try {
+        let ret;
+        const array = await svc.getEventLocationById(req.params.id);
+        if (array != null) {
+            ret = res.status(200).json(array);
+        } else {
+            ret = res.status(404).send('No se encontró el recurso solicitado.');
+        }
+    } catch (error) {
+        ret = res.status(500).send('Error interno del servidor.');
     }
-    return ret
+    return ret;
 });
 
 export default router;
