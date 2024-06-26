@@ -15,3 +15,11 @@ function emailValidation(correo){
     }
     return true;
 }
+
+function valuesBetween1And10(min, max){
+    if(min < 1 || max > 10){
+        return false
+    } else{
+        return true
+    }
+}

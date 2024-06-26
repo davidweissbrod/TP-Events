@@ -28,13 +28,13 @@ router.post('/api/user/login', async (req, res) => {
     return ret;
 })
 
-router.get('api/user', async (req, res) => {
+router.get('/api/user', async (req, res) => {
     let ret;
     const array = await svc.getUserByUsernamePassword(req.body.username, req.body.password)
     if(array != null){
         ret = res.status(200).json(array)
     } else{
-        ret = res.status(401).send('User inexistente')
+        ret = res.status(401).send('Usuario inexistente')
     }
 })
 
