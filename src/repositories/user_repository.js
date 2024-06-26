@@ -1,42 +1,45 @@
-import config from "src/configs/dbconfig.js";
-import pkg from 'pg';
-const {Client} = pkg;
-
-export default class UserRepository {
-    insertUser = async (user) => {
-        const client = new Client(config)
-        try{
-            await client.connect();
-            const sql = 'INSERT INTO public.users (first_name, last_name, username, password) VALUES ($1, $2, $3, $4)'
-            const values = [user.first_name, user.last_name, user.username, user.password]
-            const result = await client.query(sql, values)
-            return true
+import UserRepository from '../repositories/user_repository.js'
+import AuthService from './auth_service.js'
+import ValidacionesHelper from '../helpers/validaciones-helper.js'
+    
+export default class UserService{
+    login = async (username, password) => {
+        let objeto = {
+            success: false,
+            message: "Error de login",
+            token: ""
+        }     
+        const repo = new UserRepository()
+        const auth = new AuthService()
+        let user = await repo.getUserByUsernamePassword(username, password)
+        if (user != null){
+            if(user.password === password){
+                objeto.success = true;
+                objeto.message = "Correcto";
+                objeto.token = await auth.login(user);
+            }
+            else{
+                objeto.message = "Contraseña incorrecta";
+            }
         }
-        catch(error){
-            console.log(error)
-            return false
+        else{
+            objeto.message = "No se encontro el usuario";
         }
-        finally {
-            await client.end()
-        }
+            return objeto;
     }
-
-    getUserById = async (id) =>{
-        let array = null
-        const client = new Client(config)
-        try{
-            await client.connect()
-            const sql = 'SELECT * FROM users WHERE id=$1'
-            const values = [id]
-            const result = await client.query(sql, values)
-            array = result.rows
+    
+    register = async (user) => {
+        const repo = new UserRepository();
+        let ret;
+        if (!ValidacionesHelper.getValidatedString(user.first_name) || !ValidacionesHelper.getValidatedString(user.last_name) || !ValidacionesHelper.getValidatedString(user.password)){       
+            ret = "El nombre, el apellido o la contraseña no son validos";
         }
-        catch (error){
-            console.log(error)
+        else if (!ValidacionesHelper.emailValidation(user.username)){
+            ret = "El Email no es valido";
         }
-        finally {
-            await client.end()
+        else{
+            ret = repo.CreateUser(user);
         }
-        return array
+        return ret;
     }
 }
