@@ -6,7 +6,7 @@ function getValidateString(str){
     return valido
 }
 
-function emailValidation(email){
+function emailValidation(correo){
     if (correo.indexOf("@") === -1 || correo.indexOf(".") === -1) {
         return false;
     }

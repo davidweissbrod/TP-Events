@@ -1,48 +1,40 @@
 import EventRepository from '../repositories/category_repository.js'
+import VH from '../helpers/validaciones-helper.js'
 
 export default class EventService {
-    getAllAsync = async () => {
+    getAsync = async(name, category, startdate, tag) => {
         const repo = new EventRepository();
-        return await repo.getAllAsync();
+        let sql = 'WHERE ';
+        if(name != null){
+            sql += `name = '${name}' AND `;
+        }
+        if(category != null){
+            sql += `id_event_category = ${category} AND `;
+        }
+        if(startdate != null){
+            sql += `start_date = '${startdate}' AND `;
+        }
+        if(tag != null){
+            sql += `tag = '${tag}' AND `;
+        }
+        return await repo.getAsync(sql);
     }
-    getEventByName = async (eventName) => {
+    getAllAsync = async(page = 1) =>{
         const repo = new EventRepository();
-        return await repo.getEventByName(eventName);
+        const returnArray = await repo.getAllAsync(page);
+        return returnArray;
+
     }
-    getEventByCategory = async (category) => {
-        const repo = EventRepository();
-        return await repo.getEventByCategory(category);
+    getEventById = async(id) =>{
+        const repo = new EventRepository();
+        const returnArray = await repo.getById(id);
+        return returnArray;
     }
-    getEventByDate = async (date) => {
-        const repo = EventRepository();
-        return await repo.getEventByDate(date)
-    }
-    getEventByTag = async (tag) => {
-        const repo = EventRepository();
-        return await repo.getEventByTag(tag)
-    }
-    getEventById = async (id) => {
-        const repo = EventRepository();
-        return await repo.getEventById(id)
-    }
-    getEventByFirstName = async (first_name) => {
-        const repo = EventRepository();
-        return await repo.getEventByFirstName(first_name)
-    }
-    getEventByLastName = async (last_name) => {
-        const repo = EventRepository();
-        return await repo.getEventByLastName(last_name)
-    }
-    getEventByUsername = async (username) => {
-        const repo = EventRepository();
-        return await repo.getEventByUsername(username)
-    }
-    getEventByAttendance = async (attended) => {
-        const repo = EventRepository();
-        return await repo.getEventByAttendance(attended)
-    }
-    getEventByRating = async (rating) => {
-        const repo = EventRepository();
-        return await repo.getEventByRating(rating)
+    createEvent = async(event) => {
+        const repo = new EventRepository();
+        if(VH.getValidatedString(event.name) || VH.getValidatedString(event.description)){
+        
+        }
+        return await repo.createEvent(event);
     }
 }
