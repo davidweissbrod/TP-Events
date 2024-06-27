@@ -158,18 +158,26 @@ export default class EventRepository{
         return returnArray.rows[0];
     }
 
-    async createEvent(event){
+    async insertEvent(event){
         const sql = `INSERT INTO public.events (name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user) 
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`;
         let values = [event.name, event.description, event.id_event_category, event.id_event_location, event.start_date, event.duration_in_minutes, event.price, event.enable_for_enrollment, event.max_assistance, event.id_creator_user];
-        let returnArray = await PQ.PostgreQuery(sql, values);
+        let array = await PQ.PostgreQuery(sql, values);
 
-        if(returnArray.rowCount != 0){
+        if(array.rowCount != 0){
             return true;
         }
         else{
             return false;
         }
+    }
+    
+    async updateEvent(event){
+
+    }
+
+    async deleteEventById(id){
+        
     }
 
 }

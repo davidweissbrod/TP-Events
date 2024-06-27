@@ -1,8 +1,9 @@
 import {Router} from 'express';
 import EventService from 'src/services/event_service.js'
-import middleware from '../middlewares/auth_middleware'
+import AuthMiddleware from '../middlewares/auth_middleware'
 const router = Router();
 const svc = new EventService();
+const middleware = new AuthMiddleware();
 
 router.get('/api/event/', async (req, res) =>{
     let ret;
@@ -37,21 +38,70 @@ router.get('/api/event/{id}', async (req, res) => {
     }
 })
 
-router.post('', middleware.AuthMiddleware, async (req, res) => {
+router.get('/search', async (req, res) => {
     let ret;
-    const returnArray = await svc.createEvent(new Event(0, req.body.name, req.body.description, req.body.id_event_category, 
+    const array = await svc.getParticipants(req.query.first_name, req.last_name, req.query.username, req.query.attended, req.query.rating)
+    if(array != null){
+        ret = res.status(200).json(array)
+    } else{
+        ret = res.status(404).send('No se encontraron participantes') 
+    }
+})
+
+router.post('', middleware.AuthMiddleware(), async (req, res) => {
+    try{
+        let ret;
+        const array = await svc.insertEvent(new Event(0, req.body.name, req.body.description, req.body.id_event_category, 
         req.body.id_event_location, req.body.start_date, req.body.duration_in_minutes, req.body.price, 
         req.body.enabled_for_enrollment, req.body.max_assistance, req.user.id));
 
-    if(returnArray){
-        ret = res.status(201).send('Created')
-    }
-    else{   
-        ret = res.status(400).send("Bad Request");
+        if(array){
+            ret = res.status(201).send('Created')
+        }
+        else{   
+            ret = res.status(400).send("Bad Request");
+        }
+    } 
+    catch{
+        ret = res.status(401).send('El usuario no esta autenticado') 
     }
     return ret;
 });
 
+
+router.put('', middleware.AuthMiddleware(), async (req, res) => {
+    try{
+        let ret;
+        const array = await svc.updateEvent(new Event(0, req.body.name, req.body.description, req.body.id_event_category, 
+            req.body.id_event_location, req.body.start_date, req.body.duration_in_minutes, req.body.price, 
+            req.body.enabled_for_enrollment, req.body.max_assistance, req.user.id))
+        if(array != null){
+            ret = res.status(201).send('Updated')
+        }
+        else{
+            ret = res.status(400).send('Bad Request')
+        }
+
+    } catch{
+        ret = res.status(401).send('El usuario no esta autenticado')
+    }
+})
+
+router.put('', middleware.AuthMiddleware(), async (req, res) => {
+    try{
+        let ret;
+        const array = await svc.deleteEventById(req.params.id)
+        if(array != null){
+            ret = res.status(201).send('Deleted')
+        }
+        else{
+            ret = res.status(400).send('Bad Request')
+        }
+
+    } catch{
+        ret = res.status(401).send('El usuario no esta autenticado')
+    }
+})
 
 
 export default router;
