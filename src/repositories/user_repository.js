@@ -1,45 +1,33 @@
-import UserRepository from '../repositories/user_repository.js'
-import AuthService from './auth_service.js'
-import ValidacionesHelper from '../helpers/validaciones-helper.js'
-    
-export default class UserService{
-    login = async (username, password) => {
-        let objeto = {
-            success: false,
-            message: "Error de login",
-            token: ""
-        }     
-        const repo = new UserRepository()
-        const auth = new AuthService()
-        let user = await repo.getUserByUsernamePassword(username, password)
-        if (user != null){
-            if(user.password === password){
-                objeto.success = true;
-                objeto.message = "Correcto";
-                objeto.token = await auth.login(user);
-            }
-            else{
-                objeto.message = "Contraseña incorrecta";
-            }
-        }
-        else{
-            objeto.message = "No se encontro el usuario";
-        }
-            return objeto;
+import BD_Helper from "../helpers/query-sql-helper.js"
+const PQ = new BD_Helper();
+
+export default class UsersRepository{
+    getAllAsync = async () => {
+        const sql = 'SELECT * FROM public.users'
+        let response = await PQ.PostgreQuery(sql);
+        return response.rows;
     }
-    
-    register = async (user) => {
-        const repo = new UserRepository();
-        let ret;
-        if (!ValidacionesHelper.getValidatedString(user.first_name) || !ValidacionesHelper.getValidatedString(user.last_name) || !ValidacionesHelper.getValidatedString(user.password)){       
-            ret = "El nombre, el apellido o la contraseña no son validos";
-        }
-        else if (!ValidacionesHelper.emailValidation(user.username)){
-            ret = "El Email no es valido";
+    getUserById = async (id) => {
+        const sql = 'SELECT * FROM public.users WHERE id = $1'
+        const values = [id];
+        const response = await PQ.PostgreQuery(sql, values);
+        return response.rows[0];
+    }
+    getUserByUsername = async (username) => {
+        const sql = 'SELECT * FROM public.users WHERE username = $1'
+        const values = [username];
+        const response = await PQ.PostgreQuery(sql, values);
+        return response.rows[0];
+    }
+    insertUser = async (user) => {
+        const sql = 'INSERT INTO public.users (first_name, last_name, username, password) VALUES ($1, $2, $3, $4)'
+        const values = [user.first_name, user.last_name, user.username, user.password]
+        const response = await PQ.PostgreQuery(sql, values);
+        if(response.rowCount != 0){
+            return true;
         }
         else{
-            ret = repo.CreateUser(user);
+            return false;
         }
-        return ret;
     }
 }

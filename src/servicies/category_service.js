@@ -1,4 +1,7 @@
 import EventCategoryRepository from '../repositories/category_repository.js'
+import Helper from '../helpers/validaciones-helper.js'
+
+const validate = new Helper();
 
 export default class EventCategoryService {
     getAllAsync = async () => {
@@ -18,6 +21,9 @@ export default class EventCategoryService {
 
     updateEventCategory = async (eventCategory) => {
         const repo = new EventCategoryRepository();
+        if (validate.getValidatedString(eventCategory.name)){
+            return "invalid";   
+        }
         return await repo.updateEventCategory(eventCategory);
     }
 

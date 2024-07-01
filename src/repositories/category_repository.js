@@ -1,102 +1,55 @@
-import config from "src/configs/dbconfig.js";
-import pkg from 'pg';
-const {Client} = pkg;
+import BD_Helper from "../helpers/sql-helper.js"
+
+const PQ = new BD_Helper();
+
 
 export default class EventCategoryRepository {
     getAllAsync = async () => {
-        let array = null
-        const client = new Client(config)
-        try{
-            await client.connect()
-            const sql = 'SELECT * FROM events'
-            const result = await client.query(sql)
-            array = result.rows;
-        }
-        catch (error){
-            console.log(error)
-        }
-        finally {
-            await client.end()
-        }
-        return array
+        const sql = 'SELECT * FROM event_categories'
+        let array = await PQ.PostgreQuery(sql);
+        return array.rows;
     }
 
     getCategoryById = async (id) => {
-        let array = null
-        const client = new Client(config)
-        try{
-            await client.connect()
-            const sql = 'SELECT * FROM event_category WHERE id=$1'
-            const values = [id]
-            const result = await client.query(sql, values)
-            array = result.rows
-        }
-        catch (error){
-            console.log(error)
-        }
-        finally {
-            await client.end()
-        }
-        return array
+        const sql = 'SELECT * FROM event_categories WHERE id=$1'
+        const values = [id];
+        let returnArray = await PQ.PostgreQuery(sql, values);
+        return returnArray.rows;
     }
 
     insertCategory = async (cat) => {
-        const client = new Client(config)
-        try{
-            await client.connect();
-            const sql = 'INSERT INTO public.provinces (name, display_order) VALUES ($1, $2)'
-            const values = [cat.name, cat.display_order]
-            const result = await client.query(sql, values)
+        const sql = 'INSERT INTO public.event_categories (name, display_order) VALUES ($1, $2)';
+        const values = [cat.name, cat.display_order]
+        const result = await PQ.PostgreQuery(sql, values)
+        if(result.rowCount != 0){
             return true
         }
-        catch (error){
-            console.log(error)
+        else{
             return false
-        }
-        finally {
-            await client.end()
         }
     }
 
     updateEventCategory = async (cat) => {
-        const client = new Client(config)
-        try{
-            await client.connect()
-            const sql = 'UPDATE public.event_category SET "name" = $1, display_order = $2'
-            const values = [cat.name, cat.display_order, cat.id]
-            const result = await client.query(sql, values)
-            if(result.rowCount == 0){
-                return false
-            }
+        const sql = 'UPDATE public.event_categories SET "name" = $1, "display_order" = $2 WHERE id = $3'
+        const values = [cat.name, cat.display_order, cat.id]
+        const result = await PQ.PostgreQuery(sql, values)
+        if(result.rowCount != 0){
             return true
         }
-        catch (error){
-            console.log(error)
+        else{
             return false
-        }
-        finally {
-            await client.end()
         }
     }
 
     deleteEventCategory = async (id) => {
-        const client = new Client(config)
-        try{
-            await client.connect();
-            const sql = 'DELETE FROM event_category WHERE id = $1'
-            const values = [id]
-            const result = await client.query(sql, values)
-            if(result.rowCount == 0){
-                return false
-            }
-            return true
-        }   
-        catch(error){
-            console.log(error)
-            return null
+        const sql = 'DELETE FROM event_categories where id = $1';
+        const values = [id];
+        const result = await PQ.PostgreQuery(sql, values);
+        if(result.rowCount != 0){
+            return true;
         }
-        finally {
-            await client.end()
+        else{
+            return false
         }
     }
 }

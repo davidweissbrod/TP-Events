@@ -1,5 +1,5 @@
-import PostgreQuery from "../helpers/sql-helper.js";
-const PQ = new PostgreQuery();
+import BD_Helper from "../helpers/sql-helper.js";
+const PQ = new BD_Helper();
 
 export default class EventRepository{
     async getAsync(sql){
@@ -173,11 +173,22 @@ export default class EventRepository{
     }
     
     async updateEvent(event){
-
+        const sql = `UPDATE public.events
+        SET name = $1, description = $2, id_event_category = $3, id_event_location = $4, start_date = $5, duration_in_minutes = $6, price = $7, enable_for_enrollment = $8, max_assistance = $9 
+        WHERE id = $10`;
+        let values = [event.name, event.description, event.id_event_category, event.id_event_location, event.start_date, event.duration_in_minutes, event.price, event.enable_for_enrollment, event.max_assistance, event.id];
+        let array = await PQ.PostgreQuery(sql, values);
+        return true;
     }
 
     async deleteEventById(id){
-        
+        const sql = 'DELETE FROM events WHERE id = $1'
+        const values = [id]
+        let array = await PQ.PostgreQuery(sql, values);
+        if(array.rowCount != 0){
+            return true;
+        }
+        return false;    
     }
 
 }
