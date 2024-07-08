@@ -31,9 +31,6 @@ router.post('/api/event-category/', async (req, res) => {
     if(ret){
         ret = res.status(201).send("Created")
     }
-    else if(getValidateString(req.body.name)){
-        ret = res.status(400).send("El nombre debe tener 3 o mas letras")
-    }
     else{
         ret = res.status(400).send("Error")
     }
@@ -44,9 +41,6 @@ router.put('/api/event-category/', async (req, res) => {
     ret = await svc.updateEventCategory(new EventCategory(req.body.name, req.body.display_order))
     if(ret){
         ret = res.status(200).send('Creado')
-    } 
-    else if(getValidateString(req.body.name)){
-        ret = res.status(400).send('El nombre es invalido')
     } 
     else{
         ret = res.status(404).send('No se encontro el id')

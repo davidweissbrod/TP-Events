@@ -1,8 +1,8 @@
 import {Router} from 'express';
 import EventService from 'src/services/event_service.js'
 import Event from '../entities/events.js';
-import EventEnrollmentService from '../services/events_enrollment-service.js'
-import AuthMiddleware from '../middlewares/auth_middleware'
+import EventEnrollmentService from '../services/events_enrollment_service.js'
+import AuthMiddleware from '../middlewares/auth_middleware.js'
 const router = Router();
 const svc = new EventService();
 const middleware = new AuthMiddleware();
@@ -89,7 +89,7 @@ router.put('', middleware.AuthMiddleware(), async (req, res) => {
     }
 })
 
-router.put('', middleware.AuthMiddleware(), async (req, res) => {
+router.delete('/:id', middleware.AuthMiddleware(), async (req, res) => {
     try{
         let ret;
         const array = await svc.deleteEventById(req.params.id)
@@ -99,16 +99,24 @@ router.put('', middleware.AuthMiddleware(), async (req, res) => {
         else{
             ret = res.status(400).send(array.message)
         }
-
     } catch{
         ret = res.status(401).send('El usuario no esta autenticado')
     }
 })
 
 router.post('/:id/enrollment', middleware.AuthMiddleware, async (req, res) => {
-    let ret;
-    const array = await enrollmentService.enrrollUser(req.params.id);
-    //falta terminar eso
+    try{
+        let ret;
+        const array = await enrollmentService.enrrollUser(req.params.id);
+        if(array.status){
+            ret = res.status(201).send(array.message)
+        }
+        else{
+            ret = res.status(400).send(array.message)
+        }
+    } catch{
+        ret = res.status(401).send('El usuario no esta autenticado')
+    }
 });
 
 export default router;

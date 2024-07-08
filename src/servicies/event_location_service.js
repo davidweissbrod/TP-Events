@@ -1,83 +1,78 @@
 import EventLocationRepository from '../repositories/event_location_repository.js'
-import AuthService from '../middlewares/auth_middleware.js'
+import ReturnObject from '../entities/return_object.js'
+import validaciones from '../helpers/validaciones-helper.js'
 
 export default class EventLocationService {
-    getAllAsync = async () => {
+    getUserLocations = async (id) => {
         const repo = new EventLocationRepository();
-        return await repo.getAllAsync();
+        let obj = new ReturnObject();
+
+        const response = await repo.getUserLocations(id)
+
+        obj.status = true;
+        obj.code = 200;
+        obj.JSONcontent = response.rows;
+        obj.message = "Se obtuvieron con exito"
+
+        return returnObject;
     }
 
-    getEventLocationById = async (id_creator_user) => {
-        let objeto = {
-            success: false,
-            message: "",
-            token: ""
-        }     
-        const repo = new EventLocationRepository()
-        const auth = new AuthService()
-        let user = await repo.getUserById(id_creator_user)
-        if(user != null){
-            objeto.success = true;
-            objeto.message = "Correcto";
-            objeto.token = await auth.login(user);
-        } else{
-            objeto.message = "No se encontro el usuario";
-        }
-        return await repo.getEventLocationById(id_creator_user);
-    }
-
-    insertEventLocation = async (evLoc) => {
-        let objeto = {
-            success: false,
-            message: "",
-            token: ""
-        }
+    getUserLocationById = async (id_creator_user, id_location) => {
         const repo = new EventLocationRepository();
-        const auth = new AuthService();
-        let user = await repo.getUserById(evLoc.id_creator_user)
-        if(user != null){
-            objeto.success = true;
-            objeto.message = "Correcto";
-            objeto.token = await auth.generateToken(objeto);
-        } else{
-            objeto.message = "No se encontro el usuario";
-        }     
-        return await repo.insertEventLocation(evLoc);
-    }
+        let obj = new ReturnObject();
 
-    updateEventLocation = async (evLoc) => {
-        let objeto = {
-            success: false,
-            message: "",
-            token: ""
+        const response = await repo.getUserLocationById(id_creator_user, id_location)
+
+        if (response.rowCount != 0){
+            obj.status = true;
+            obj.code = 200;
+            obj.JSONcontent = response.rows;
+            obj.message = "Se obtuvo correctamente"
         }
+        else{
+            obj.status = false;
+            obj.code = 404;
+            obj.message = 'Esa ubicacion no existe'
+        }
+
+        return obj;
+    }
+    createUserLocation = async (event_location) => {
         const repo = new EventLocationRepository();
-        const auth = new AuthService();
-        let user = await repo.getUserById(evLoc.id_creator_user)
-        if(user != null){
-            objeto.success = true
-            objeto.message = "Correcto"
-            objeto.token = await auth.generateToken(objeto);
-        }
-        return await repo.updateEventLocation(evLoc);
-    }
+        let obj = new ReturnObject();
 
-    deleteEventLocation = async (id_creator_user) => {
-        let objeto = {
-            success: false,
-            message: "",
-            token: ""
-        }     
-        const repo = new EventLocationRepository()
-        const auth = new AuthService()
-        let user = await repo.getUserById(id_creator_user)
-        if(user != null){
-            objeto.success = true;
-            objeto.message = "Correcto";
-            objeto.token = await auth.login(user);
-        } else{
-            objeto.message = "No se encontro el usuario";
+        if (!validaciones.getValidatedString(event_location.name) || !validaciones.getValidatedString(event_location.full_address)){
+            obj = ReturnObject.ErrorObject('Nombre o direccion invalidas'); 
+            return obj; 
         }
-        return await repo.deleteEventLocation(id_creator_user)
+        if(event_location.max_capacity <= 0){
+            obj = ReturnObject.ErrorObject('Capacidad invalida');
+            return obj;
+        }
+        const response = await repo.createUserLocation(event_location);
+        if(response.rowCount > 0){
+            obj.status = true;
+            obj.code = 200;
+            obj.message = "Creado con exito";
+        }
+        else{
+            obj = ReturnObject.negarObjeto('No se pudo crear');
+        }   
+
+        return obj;
+    }
+    deleteUserLocation = async (id, id_creator_user) => {
+        const repo = new EventLocationRepository();
+        let obj = new ReturnObject();
+        const response = await repo.deleteEventLocation(id, id_creator_user)
+        if(response.rowCount > 0){
+            obj.status = true;
+            obj.code = 200;
+            obj.message = "Eliminado";         
+        }
+        else{
+            obj = ReturnObject.ErrorObject('No se pudo eliminar');
+        }
+        return obj;
     }
 }
