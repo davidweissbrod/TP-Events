@@ -73,6 +73,8 @@ export default class EventRepository{
             LEFT JOIN event_locations ON events.id_event_location = event_locations.id
             LEFT JOIN locations ON event_locations.id_location = locations.id
             LEFT JOIN provinces ON locations.id_province = provinces.id
+            OFFSET $1
+            LIMIT 3 
         ),
         total_event_count AS (
             SELECT count(*) AS total_count
@@ -82,8 +84,8 @@ export default class EventRepository{
             (SELECT json_agg(row_to_json(event_details)) FROM event_details) AS events,
             (SELECT row_to_json(total_event_count) FROM total_event_count) AS total_count;
         `
-
-        let array = await PQ.PostgreQuery(sql);
+        let values = [(page * 10)];
+        let array = await PQ.PostgreQuery(sql, values);
         return array.rows;
     }
 
