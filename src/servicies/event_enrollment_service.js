@@ -1,5 +1,6 @@
 import EventsEnrollmentRepository from '../repositories/event_enrollment_repository.js';
 
+
 export default class EventsEnrollmentService{
 
     getUsersEnrolls = async(id, first_name, last_name, username, attended, rating) => {

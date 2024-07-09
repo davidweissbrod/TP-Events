@@ -38,7 +38,7 @@ export default class UserService{
             ret = "El Email no es valido";
         }
         else{
-            ret = repo.CreateUser(user);
+            ret = repo.insertUser(user);
         }
         return ret;
     }

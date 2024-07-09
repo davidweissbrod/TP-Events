@@ -30,7 +30,11 @@ app.get('/api/event-location/{id}', auth.AuthMiddleware, async (req, res) => {
 app.post('', auth.AuthMiddleware, async (req, res) => {
     let ret;
     const array = await svc.insertEventLocation(new EventLocations(1, req.body.id_location, req.body.name, req.body.full_address, req.body.max_capacity, req.body.latitude, req.body.longitude, req.user.id))
-    ret =  res.status(201).send(array.message);
+    if(array.status){
+        ret =  res.status(201).send(array.message);
+    } else{
+        ret = res.status(400).send(array.message)
+    }
 })
 
 app.put('', auth.AuthMiddleware, async (req, res) => {
@@ -38,7 +42,7 @@ app.put('', auth.AuthMiddleware, async (req, res) => {
     ret = await svc.updateEventLocation(new EventLocation(req.body.id_location, req.body.name, req.body.full_adress, req.body.max_capacity, req.body.latitude, req.body.longitude, req.body.id_creator_user))
     if(ret){
         ret = res.status(200).send('Actualizado')
-    } else if(getValidateString(req.body.name) || getValidateString(req.body.full_adress)){
+    } else {
         ret = res.status(400).send('Bad request')
     }
 })

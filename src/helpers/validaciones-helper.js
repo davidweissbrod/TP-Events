@@ -17,7 +17,7 @@ function emailValidation(correo){
 }
 
 function valuesBetween1And10(min, max){
-    if(min < 1 || max > 10){
+    if(min <= 1 || max >= 10){
         return false
     } else{
         return true

@@ -18,21 +18,19 @@ export default class EventService {
         if(tag != null){
             sql += `tag = '${tag}' AND `;
         }
+        sql = sql.substring(0,((sql.length)-3))
         return await repo.getAsync(sql);
     }
     getAllAsync = async(page = 1) =>{
         const repo = new EventRepository();
-        const returnArray = await repo.getAllAsync(page);
-        return returnArray;
-
+        return await repo.getAllAsync(page);
     }
     getUsersEnrolls = async(id, first_name, last_name, username, attended, rating) => {
         return EventsEnrollmentService.getUsersEnrolls(id, first_name, last_name, username, attended, rating);
     }
     getEventById = async(id) =>{
         const repo = new EventRepository();
-        const returnArray = await repo.getById(id);
-        return returnArray;
+        return await repo.getById(id); 
     }
     createEvent = async(event) => {
         const repo = new EventRepository();
@@ -70,7 +68,7 @@ export default class EventService {
         const repo = new EventRepository();
         let obj = {
             status: false,
-            message: "Datos invalidos",
+            message: "Datos invalidos"
         }
         const validatedEvent = await getEventById(id) 
         if(validatedEvent != null){

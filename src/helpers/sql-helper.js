@@ -1,23 +1,23 @@
-import config from "../configs/dbconfig.js";
+import config from "../configs/db_config.js";
 import pkg from 'pg';
 const {Client} = pkg;
 
-export default class PostgreQuery{
+export default class Query{
 
-    async PostgreQuery(query, values = undefined){
-        let returnArray = null;
+    async Query(query, values = undefined){
+        let ret = null;
         const client = new Client(config);
         try{
             await client.connect(); 
             const result = await client.query(query, values);
-            returnArray = result;
+            ret = result;
         }
         catch(error){
             console.log(error);
         }
         finally{
             await client.end();
-            return returnArray;
+            return ret;
         }
     }
 

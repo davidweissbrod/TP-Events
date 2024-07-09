@@ -1,10 +1,11 @@
 import {Router} from 'express';
-import EventService from 'src/services/event_service.js'
+import EventEnrollmentService from 'src/services/event_service.js'
 import AuthMiddleware from 'src/middlewares/auth_middleware'
 import EventEnrollment from '../entities/event_enrollments.js';
 import ValidacionesHelper from 'src/helpers/validaciones-helper'
+const auth = new AuthMiddleware();
 const router = Router();
-const svc = new EventService();
+const svc = new EventEnrollmentService();
 
 router.patch('/api/event/{id}/enrollment/{entero}', AuthMiddleware, async (req, res) => {
     try{
@@ -22,3 +23,15 @@ router.patch('/api/event/{id}/enrollment/{entero}', AuthMiddleware, async (req, 
     }
     return ret
 })
+
+router.post('/:id/enrollment', auth.AuthMiddleware, async (req, res) => {
+    let ret;
+    const array = await svc.registerUserFromEvent(req.params.id, req.user)
+    if(array.status){
+        ret = res.status(200).send(array.message)
+    } else{
+        ret = res.status(400).send(array.message);
+    }
+})
+
+export default router;

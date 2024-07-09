@@ -1,77 +1,80 @@
 import EventLocationRepository from '../repositories/event_location_repository.js'
-import ReturnObject from '../entities/return_object.js'
 import validaciones from '../helpers/validaciones-helper.js'
 
 export default class EventLocationService {
-    getUserLocations = async (id) => {
+    getEventLocations = async (id) => {
         const repo = new EventLocationRepository();
-        let obj = new ReturnObject();
-
-        const response = await repo.getUserLocations(id)
-
-        obj.status = true;
-        obj.code = 200;
-        obj.JSONcontent = response.rows;
-        obj.message = "Se obtuvieron con exito"
-
-        return returnObject;
+        let obj = {
+            status: false,
+            message: ""
+        };
+        const res = await repo.getEventLocations(id)
+        if(res.rowCount != 0){
+            obj.status = true;
+            obj.message = "Se obtuvieron las ubicaciones"
+        } else{
+            obj.status = false;
+            obj.message = "Error al obtener las ubicaciones"
+        }
+        return obj;
     }
 
-    getUserLocationById = async (id_creator_user, id_location) => {
+    getEventLocationById = async (id_creator_user, id_location) => {
         const repo = new EventLocationRepository();
-        let obj = new ReturnObject();
-
-        const response = await repo.getUserLocationById(id_creator_user, id_location)
-
-        if (response.rowCount != 0){
+        let obj = {
+            status: false,
+            message: ""
+        }
+        const res = await repo.getEventLocationById(id_creator_user, id_location)
+        if (res.rowCount != 0){
             obj.status = true;
-            obj.code = 200;
-            obj.JSONcontent = response.rows;
             obj.message = "Se obtuvo correctamente"
         }
         else{
             obj.status = false;
-            obj.code = 404;
-            obj.message = 'Esa ubicacion no existe'
+            obj.message = 'No se encontro esa ubicacion'
         }
-
         return obj;
     }
-    createUserLocation = async (event_location) => {
+    insertEventLocation = async (event_location) => {
         const repo = new EventLocationRepository();
-        let obj = new ReturnObject();
-
+        let obj = {
+            status: false,
+            message: ""
+        }
         if (!validaciones.getValidatedString(event_location.name) || !validaciones.getValidatedString(event_location.full_address)){
-            obj = ReturnObject.ErrorObject('Nombre o direccion invalidas'); 
-            return obj; 
+            obj.status = false
+            obj.message = "Nombre o direccion invalidas" 
         }
         if(event_location.max_capacity <= 0){
-            obj = ReturnObject.ErrorObject('Capacidad invalida');
-            return obj;
+            obj.status = false
+            obj.message = "Capacidad invalida"
         }
-        const response = await repo.createUserLocation(event_location);
+        const response = await repo.insertEventLocation(event_location);
         if(response.rowCount > 0){
             obj.status = true;
-            obj.code = 200;
             obj.message = "Creado con exito";
         }
         else{
-            obj = ReturnObject.negarObjeto('No se pudo crear');
+            obj.status = false
+            obj.message = "No se pudo crear"
         }   
-
         return obj;
     }
-    deleteUserLocation = async (id, id_creator_user) => {
+    deleteEventLocation = async (id, id_creator_user) => {
         const repo = new EventLocationRepository();
-        let obj = new ReturnObject();
+        let obj = {
+            status: false,
+            message: ""
+        }
         const response = await repo.deleteEventLocation(id, id_creator_user)
-        if(response.rowCount > 0){
+        if(response.rowCount != 0){
             obj.status = true;
-            obj.code = 200;
-            obj.message = "Eliminado";         
+            obj.message = "Eliminado correctamente";         
         }
         else{
-            obj = ReturnObject.ErrorObject('No se pudo eliminar');
+            obj.status = false;
+            obj.message = "No se pudo eliminar";
         }
         return obj;
     }
