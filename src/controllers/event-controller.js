@@ -1,7 +1,6 @@
 import {Router} from 'express';
 import EventService from 'src/services/event_service.js'
 import Event from '../entities/events.js';
-import EventEnrollmentService from '../services/events_enrollment_service.js'
 import AuthMiddleware from '../middlewares/auth_middleware.js'
 const router = Router();
 const svc = new EventService();
@@ -38,6 +37,7 @@ router.get('/api/event/{id}', async (req, res) => {
     } else{
         ret = res.status(404).send('No se encontro el id')
     }
+    return ret;
 })
 
 router.get('/search', async (req, res) => {
@@ -48,10 +48,10 @@ router.get('/search', async (req, res) => {
     } else{
         ret = res.status(404).send('No se encontraron participantes') 
     }
+    return ret;
 })
 
 router.post('', middleware.AuthMiddleware(), async (req, res) => {
-    try{
         let ret;
         const array = await svc.insertEvent(new Event(0, req.body.name, req.body.description, req.body.id_event_category, 
         req.body.id_event_location, req.body.start_date, req.body.duration_in_minutes, req.body.price, 
@@ -63,16 +63,11 @@ router.post('', middleware.AuthMiddleware(), async (req, res) => {
         else{   
             ret = res.status(400).send(array.message);
         }
-    } 
-    catch{
-        ret = res.status(401).send('El usuario no esta autenticado') 
-    }
     return ret;
 });
 
 
 router.put('', middleware.AuthMiddleware(), async (req, res) => {
-    try{
         let ret;
         const array = await svc.updateEvent(new Event(0, req.body.name, req.body.description, req.body.id_event_category, 
             req.body.id_event_location, req.body.start_date, req.body.duration_in_minutes, req.body.price, 
@@ -83,14 +78,10 @@ router.put('', middleware.AuthMiddleware(), async (req, res) => {
         else{
             ret = res.status(400).send(array.message)
         }
-
-    } catch{
-        ret = res.status(401).send('El usuario no esta autenticado')
-    }
+    return ret;
 })
 
 router.delete('/:id', middleware.AuthMiddleware(), async (req, res) => {
-    try{
         let ret;
         const array = await svc.deleteEventById(req.params.id)
         if(array.status){
@@ -99,24 +90,7 @@ router.delete('/:id', middleware.AuthMiddleware(), async (req, res) => {
         else{
             ret = res.status(400).send(array.message)
         }
-    } catch{
-        ret = res.status(401).send('El usuario no esta autenticado')
-    }
+    return ret;
 })
-
-router.post('/:id/enrollment', middleware.AuthMiddleware, async (req, res) => {
-    try{
-        let ret;
-        const array = await enrollmentService.enrrollUser(req.params.id);
-        if(array.status){
-            ret = res.status(201).send(array.message)
-        }
-        else{
-            ret = res.status(400).send(array.message)
-        }
-    } catch{
-        ret = res.status(401).send('El usuario no esta autenticado')
-    }
-});
 
 export default router;

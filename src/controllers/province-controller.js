@@ -34,6 +34,7 @@ router.post('', async(req,res) => {
     else{
         ret = res.status(400).send("Error")
     }
+    return ret;
 });
 
 router.put('', async(req,res) => {

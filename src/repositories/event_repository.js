@@ -1,15 +1,14 @@
 import BD_Helper from "../helpers/sql-helper.js";
-const PQ = new BD_Helper();
+const help = new BD_Helper();
 
 export default class EventRepository{
     async getAsync(sql){
         sql = `SELECT * FROM events ${sql}`
-        let array = await PQ.Query(sql);
+        let array = await help.Query(sql);
         return array.rows;        
     }
 
     async getAllAsync(page = 1){ 
-
         const sql = `WITH event_details AS (
             SELECT
                 events.id,
@@ -85,7 +84,7 @@ export default class EventRepository{
             (SELECT row_to_json(total_event_count) FROM total_event_count) AS total_count;
         `
         let values = [(page * 10)];
-        let array = await PQ.Query(sql, values);
+        let array = await help.Query(sql, values);
         return array.rows;
     }
 
@@ -156,15 +155,15 @@ export default class EventRepository{
         where events.id = $1`
 
         let values = [id];
-        let returnArray = await PQ.Query(sql, values);
-        return returnArray.rows[0];
+        let array = await help.Query(sql, values);
+        return array.rows[0];
     }
 
     async insertEvent(event){
         const sql = `INSERT INTO public.events (name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user) 
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`;
         let values = [event.name, event.description, event.id_event_category, event.id_event_location, event.start_date, event.duration_in_minutes, event.price, event.enable_for_enrollment, event.max_assistance, event.id_creator_user];
-        let array = await PQ.Query(sql, values);
+        let array = await help.Query(sql, values);
         if(array.rowCount != 0){
             return true;
         }
@@ -178,14 +177,14 @@ export default class EventRepository{
         SET name = $1, description = $2, id_event_category = $3, id_event_location = $4, start_date = $5, duration_in_minutes = $6, price = $7, enable_for_enrollment = $8, max_assistance = $9 
         WHERE id = $10`;
         let values = [event.name, event.description, event.id_event_category, event.id_event_location, event.start_date, event.duration_in_minutes, event.price, event.enable_for_enrollment, event.max_assistance, event.id];
-        let array = await PQ.Query(sql, values);
+        let array = await help.Query(sql, values);
         return true;
     }
 
     async deleteEventById(id){
         const sql = 'DELETE FROM events WHERE id = $1'
         const values = [id]
-        let array = await PQ.Query(sql, values);
+        let array = await help.Query(sql, values);
         if(array.rowCount != 0){
             return true;
         }

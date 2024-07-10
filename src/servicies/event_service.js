@@ -1,6 +1,7 @@
 import EventRepository from '../repositories/category_repository.js'
-import VH from '../helpers/validaciones-helper.js'
+import Validaciones from '../helpers/validaciones-helper.js'
 import EventsEnrollmentService from './event_enrollment_service.js';
+const valHelp = new Validaciones();
 
 export default class EventService {
     getAsync = async(name, category, startdate, tag) => {
@@ -25,9 +26,6 @@ export default class EventService {
         const repo = new EventRepository();
         return await repo.getAllAsync(page);
     }
-    getUsersEnrolls = async(id, first_name, last_name, username, attended, rating) => {
-        return EventsEnrollmentService.getUsersEnrolls(id, first_name, last_name, username, attended, rating);
-    }
     getEventById = async(id) =>{
         const repo = new EventRepository();
         return await repo.getById(id); 
@@ -38,7 +36,7 @@ export default class EventService {
             status: false,
             message: "Datos invalidos"
         }
-        if(VH.getValidatedString(event.name) || VH.getValidatedString(event.description)){
+        if(valHelp.getValidatedString(event.name) || valHelp.getValidatedString(event.description)){
             await repo.createEvent(event);
             obj.status = true;
             obj.message = "Evento creado"
@@ -53,7 +51,7 @@ export default class EventService {
         }
         const validatedEvent = await getEventById(event.id) 
         if(validatedEvent != null){
-            if(VH.getValidatedString(event.name) || VH.getValidatedString(event.description)){
+            if(valHelp.getValidatedString(event.name) || valHelp.getValidatedString(event.description)){
                 await repo.createEvent(event);
                 obj.status = true;
                 obj.message = "Evento creado"

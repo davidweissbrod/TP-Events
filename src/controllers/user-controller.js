@@ -14,6 +14,7 @@ router.post('/api/user/register', async (req, res) => {
     else{
         ret = res.status(400).send(respuesta);
     }   
+    return ret;
 })
 
 router.post('/api/user/login', async (req, res) => {
@@ -35,11 +36,11 @@ router.get('/api/user', async (req, res) => {
     } else{
         ret = res.status(401).send('Usuario inexistente')
     }
+    return ret;
 })
 
 router.get('/validartoken', middleware.AuthMiddleware, async (req, res) => {
-    let respuesta = res.status(200).send("Token Valido");
-    return respuesta;
+    return res.status(200).send("Token Valido");
 });
 
 export default router;

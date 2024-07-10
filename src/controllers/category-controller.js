@@ -23,6 +23,7 @@ router.get('/api/event-category/{id}', async (req, res) => {
     } else {
         ret = res.status(404).send('Id inexistente')
     }
+    return ret;
 })
 
 router.post('/api/event-category/', async (req, res) => {
@@ -34,6 +35,7 @@ router.post('/api/event-category/', async (req, res) => {
     else{
         ret = res.status(400).send("Error")
     }
+    return ret;
 })
 
 router.put('/api/event-category/', async (req, res) => {
@@ -45,6 +47,7 @@ router.put('/api/event-category/', async (req, res) => {
     else{
         ret = res.status(404).send('No se encontro el id')
     }
+    return ret;
 })
 
 router.delete('/api/event-category/{id}', async (req, res) => {
@@ -55,6 +58,7 @@ router.delete('/api/event-category/{id}', async (req, res) => {
     } else{
         ret = res.status(404).send('No se encontro el id')
     }
+    return ret;
 })
 
 export default router;

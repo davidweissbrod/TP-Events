@@ -14,7 +14,7 @@ app.get('/api/event-location', auth.AuthMiddleware,  async (req, res) => {
     }else{
         ret = res.status(500).send('Error');
     }
-    return res;
+    return ret;
 })
 
 app.get('/api/event-location/{id}', auth.AuthMiddleware, async (req, res) => {
@@ -25,6 +25,7 @@ app.get('/api/event-location/{id}', auth.AuthMiddleware, async (req, res) => {
     } else{
         ret = res.status(404).send(array.message)
     }
+    return ret;
 })
 
 app.post('', auth.AuthMiddleware, async (req, res) => {
@@ -35,6 +36,7 @@ app.post('', auth.AuthMiddleware, async (req, res) => {
     } else{
         ret = res.status(400).send(array.message)
     }
+    return ret;
 })
 
 app.put('', auth.AuthMiddleware, async (req, res) => {
@@ -45,6 +47,7 @@ app.put('', auth.AuthMiddleware, async (req, res) => {
     } else {
         ret = res.status(400).send('Bad request')
     }
+    return ret;
 })
 
 app.delete('/api/event-location/{id}', auth.AuthMiddleware, async (req, res) => {
@@ -55,6 +58,7 @@ app.delete('/api/event-location/{id}', auth.AuthMiddleware, async (req, res) => 
     } else {
         ret = res.status(404).send(array.message)
     }
+    return ret;
 })
 
 export default router;
