@@ -7,7 +7,7 @@ const middleware = new AutenticationMiddleware();
 
 
 router.post('/api/user/register', async (req, res) => {
-    let ret = await svc.Register(new Users (1, req.body.first_name, req.body.last_name, req.body.username, req.body.password));
+    let ret = await svc.register(new Users (1, req.body.first_name, req.body.last_name, req.body.username, req.body.password));
     if(ret){
         ret = res.status(201).send("Creado");
     }
