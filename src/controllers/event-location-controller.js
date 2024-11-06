@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import EventLocationService from 'src/services/event_location_service.js'
+import EventLocationService from './services/event_location_service.js'
 import EventLocations from '../entities/event_locations.js';
 import AuthMiddleware from "../middlewares/auth_middleware.js"
 const auth = new AuthMiddleware();

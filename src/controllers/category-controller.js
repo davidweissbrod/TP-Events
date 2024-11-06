@@ -1,16 +1,16 @@
 import {Router} from 'express';
-import EventCategoryService from 'src/services/category_service.js'
+import EventCategoryService from '../servicies/category_service.js'
 import EventCategory from '../entities/event_categories.js';
 const router = Router();
 const svc = new EventCategoryService();
 
 router.get('/api/event-category', async (req, res) => {
-    let res;
+    let ret;
     const array = await svc.getAllAsync();
     if(array != null){
-        res = res.status(200).json(array);
+        ret = res.status(200).json(array);
     }else{
-        res = res.status(500).send('Error');
+        ret = res.status(500).send('Error');
     }
     return res;
 })

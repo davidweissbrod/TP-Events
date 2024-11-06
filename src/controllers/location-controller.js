@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import LocationService from 'src/services/location_service.js'
+import LocationService from '../servicies/location_service.js'
 import AuthMiddleware from "../middlewares/auth_middleware.js"
 const auth = new AuthMiddleware();
 const router = Router();

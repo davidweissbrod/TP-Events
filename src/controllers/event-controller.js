@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import EventService from 'src/services/event_service.js'
+import EventService from '../servicies/event_service.js'
 import Event from '../entities/events.js';
 import AuthMiddleware from '../middlewares/auth_middleware.js'
 const router = Router();

@@ -1,4 +1,4 @@
-import config from "src/configs/dbconfig.js";
+import config from "../configs/db_config.js";
 import pkg from 'pg';
 const {Client} = pkg;
 

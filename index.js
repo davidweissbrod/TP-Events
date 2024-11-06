@@ -1,4 +1,4 @@
-import express from"express"; 
+import {express} from "express"; 
 import cors from "cors"; 
 import ProvinceRouter from "./src/controllers/province-controller.js" 
 import EventRouter from "./src/controllers/event-controller.js"

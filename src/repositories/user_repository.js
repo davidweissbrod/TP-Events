@@ -1,4 +1,4 @@
-import BD_Helper from "../helpers/query-sql-helper.js"
+import BD_Helper from "../helpers/sql-helper.js"
 const PQ = new BD_Helper();
 
 export default class UsersRepository{
