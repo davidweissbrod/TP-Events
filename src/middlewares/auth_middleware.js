@@ -2,14 +2,6 @@ import AuthHelper from "../auth/token.js"
 
 export default class AuthMiddleware {
 
-    RemoveBearerFromHeader = (header) => {
-        let ret = header;
-        if (header && header.startsWith('Bearer ')){
-            ret = header.slice(7);
-        }
-        return ret;
-    }
-
     AuthMiddleware = async (req, res, next) => {
         let authHeader;
         let payload;
@@ -17,10 +9,9 @@ export default class AuthMiddleware {
         authHeader = req.headers.authorization;
 
         if(!authHeader) {
-            ret = res.status(401).send('401 Unauthorized, es necesario un token')
+            ret = res.status(401).send('Es necesario un token')
         }
         else{
-            authHeader = this.RemoveBearerFromHeader(authHeader);
             const authHelper = new AuthHelper();
             payload = await authHelper.decryptJWT(authHeader);
 
