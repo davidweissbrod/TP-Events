@@ -13,12 +13,12 @@ const port = 3000;
 //Middlewares
 app.use(cors());
 app.use(express.json());
-app.use("/api/provinces", ProvinceRouter);
-app.use("/api/events", EventRouter);
-app.use("api/locations", LocationRouter);
-app.use("api/event-category", EventCategoryRouter);
-app.use("api/users", UserRouter);
-app.use("api/event-location", EventLocationRouter)
+app.use("/provinces", ProvinceRouter);
+app.use("/events", EventRouter);
+app.use("/locations", LocationRouter);
+app.use("/event-category", EventCategoryRouter);
+app.use("/users", UserRouter);
+app.use("/event-location", EventLocationRouter)
 
 //Inicio el server y lo pongo a escuchar
 app.listen(port, () => {

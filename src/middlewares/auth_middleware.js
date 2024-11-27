@@ -1,31 +1,26 @@
-import AuthHelper from "../auth/token.js"
+import Token from '../auth/token.js'; 
 
-export default class AuthMiddleware {
+const tokenService = new Token();
 
-    AuthMiddleware = async (req, res, next) => {
-        let authHeader;
-        let payload;
-        let ret; 
-        authHeader = req.headers.authorization;
-
-        if(!authHeader) {
-            ret = res.status(401).send('Es necesario un token')
+export default class AuthMiddleware{
+    AuthMiddleware = (req, res, next) => {
+        console.log(req.headers)
+       /* const token = req.headers.authorization?.split(' ')[1];
+    
+        if (!token) {
+            return res.status(401).json({ message: 'No token provided' });
         }
-        else{
-            const authHelper = new AuthHelper();
-            payload = await authHelper.decryptJWT(authHeader);
-
-            if(payload != null){
-                req.user = payload;
-                next();
-            }
-            else{
-                ret = res.status(401).send('401 Unauthorized, token invalido');
-            }
+        const payload = tokenService.decryptToken(token);
+        if (!payload) {
+            return res.status(401).json({ message: 'Invalid or expired token' });
         }
-        return ret;
-    }
+    
+        req.user = payload;
+        next();*/
+    };
+    
 }
+
 
 
 

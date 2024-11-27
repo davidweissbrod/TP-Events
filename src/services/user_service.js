@@ -11,12 +11,12 @@ export default class UserService{
         }     
         const repo = new UserRepository()
         const auth = new AuthService()
-        let user = await repo.getUserByUsernamePassword(username, password)
+        let user = await repo.getUserByUsername(username)
         if (user != null){
             if(user.password === password){
                 objeto.success = true;
                 objeto.message = "Correcto";
-                objeto.token = await auth.login(user);
+                objeto.token = await auth.Login(user);
             }
             else{
                 objeto.message = "Contraseña incorrecta";

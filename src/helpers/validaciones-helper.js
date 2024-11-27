@@ -1,7 +1,7 @@
 
 export default class ValidacionesHelper{
 
-    getValidateString(str){
+    getValidatedString(str){
         let valido = true
         if(str.length < 3 || str === ""){
             return false
